@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class ClientDTO {
 
-    private Integer id;
+    private Long id;
     private String name;
     private String cpf;
     private Double income;
@@ -17,7 +17,7 @@ public class ClientDTO {
 
     }
 
-    public ClientDTO(Integer id, String name, String cpf, Double income, LocalDate birthDate, Integer children) {
+    public ClientDTO(Long id, String name, String cpf, Double income, LocalDate birthDate, Integer children) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
@@ -33,6 +33,10 @@ public class ClientDTO {
         this.income = client.getIncome();
         this.birthDate = client.getBirthDate();
         this.children = client.getChildren();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
