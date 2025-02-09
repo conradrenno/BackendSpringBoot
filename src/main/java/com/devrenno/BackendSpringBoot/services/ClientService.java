@@ -44,6 +44,11 @@ public class ClientService {
         return new ClientDTO(client);
     }
 
+    @Transactional
+    public void delete(Long id){
+        repository.deleteById(id);
+    }
+
     public void copyDtoToEntity(ClientDTO clientDTO, Client client){
 
         client.setName(clientDTO.getName());
