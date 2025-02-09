@@ -3,6 +3,8 @@ package com.devrenno.BackendSpringBoot.services;
 import com.devrenno.BackendSpringBoot.dto.ClientDTO;
 import com.devrenno.BackendSpringBoot.entities.Client;
 import com.devrenno.BackendSpringBoot.repositories.ClientRepository;
+import com.devrenno.BackendSpringBoot.services.exceptions.ElementNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +20,10 @@ public class ClientService {
 
     @Transactional(readOnly = true)
     public ClientDTO findById(Long id){
-        Client client = repository.findById(id).get();
+        Client client = repository.findById(id).orElseThrow(
+                () -> new ElementNotFoundException("Element not found   ")
+        );
+
         return new ClientDTO(client);
     }
 
@@ -38,15 +43,25 @@ public class ClientService {
 
     @Transactional
     public ClientDTO update(Long id, ClientDTO clientDTO){
-        Client client = repository.getReferenceById(id);
-        copyDtoToEntity(clientDTO, client);
-        client = repository.save(client);
-        return new ClientDTO(client);
+
+        try {
+            Client client = repository.getReferenceById(id);
+            copyDtoToEntity(clientDTO, client);
+            client = repository.save(client);
+            return new ClientDTO(client);
+        } catch (EntityNotFoundException e) {
+            throw new ElementNotFoundException("Element not found");
+        }
+
     }
 
     @Transactional
     public void delete(Long id){
-        repository.deleteById(id);
+        if (!repository.existsById(id)){
+            throw new ElementNotFoundException("Element not found");
+        } else {
+            repository.deleteById(id);
+        }
     }
 
     public void copyDtoToEntity(ClientDTO clientDTO, Client client){
