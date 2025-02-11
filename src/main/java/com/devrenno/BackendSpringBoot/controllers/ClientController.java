@@ -2,6 +2,7 @@ package com.devrenno.BackendSpringBoot.controllers;
 
 import com.devrenno.BackendSpringBoot.dto.ClientDTO;
 import com.devrenno.BackendSpringBoot.services.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientDTO> insert(@RequestBody ClientDTO clientDTO){
+    public ResponseEntity<ClientDTO> insert(@Valid @RequestBody ClientDTO clientDTO){
         clientDTO = clientService.insert(clientDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(clientDTO.getId()).toUri();
@@ -39,7 +40,7 @@ public class ClientController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ClientDTO> update(@PathVariable Long id, @RequestBody ClientDTO clientDTO){
+    public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO clientDTO){
         clientDTO = clientService.update(id, clientDTO);
         return ResponseEntity.ok(clientDTO);
     }

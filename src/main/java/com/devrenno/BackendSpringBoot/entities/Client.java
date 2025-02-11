@@ -3,6 +3,7 @@ package com.devrenno.BackendSpringBoot.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_client")
@@ -29,6 +30,7 @@ public class Client {
         this.birthDate = birthDate;
         this.children = children;
     }
+
 
     public String getName() {
         return name;
@@ -76,5 +78,18 @@ public class Client {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client client)) return false;
+
+        return Objects.equals(id, client.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
